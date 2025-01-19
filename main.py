@@ -3,51 +3,53 @@ import pygame, file_manager
 import pygame.draw_py
 
 # screen
-display_width = 640
-display_height = 360
+DISPLAY_WIDTH = 640
+DISPLAY_HEIGHT = 360
+DEFAULT_IMAGE_SIZE = 16
+IMAGE_SIZE_MULTIPLIER = 2*DEFAULT_IMAGE_SIZE
 
 # pygame setup
 pygame.init()
-screen = pygame.display.set_mode((display_width, display_height))
-clock = pygame.time.Clock()
-running = True
-dt = 0
+SCREEN = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
+CLOCK = pygame.time.Clock()
+RUNNING = True
+DELTA_TIME = 0
 
-gameDisplay = pygame.display.set_mode((display_width,display_height))
+GAME_DISPLAY = pygame.display.set_mode((DISPLAY_WIDTH,DISPLAY_HEIGHT))
 
 # player stuff
-playerImg = pygame.image.load(file_manager.playerAsset('idle'), "player-idle")
-player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
+PLAYER_IMAGE = pygame.image.load(file_manager.playerAsset('idle'), "player-idle")
+PLAYER_POSITION = pygame.Vector2(SCREEN.get_width() / 2, SCREEN.get_height() / 2)
 PLAYER_MOVEMENT_SPEED = 150
 
-while running:
+while RUNNING:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
+            RUNNING = False
 
-    # fill the screen with a color to wipe away anything from last frame
-    screen.fill("black")
+    # fill the SCREEN with a color to wipe away anything from last frame
+    SCREEN.fill("black")
 
-    gameDisplay.blit(playerImg, player_pos)
+    GAME_DISPLAY.blit(pygame.transform.scale(PLAYER_IMAGE, (IMAGE_SIZE_MULTIPLIER, IMAGE_SIZE_MULTIPLIER)), PLAYER_POSITION)
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w] or keys[pygame.K_UP]:
-        player_pos.y -= PLAYER_MOVEMENT_SPEED * dt
+        PLAYER_POSITION.y -= PLAYER_MOVEMENT_SPEED * DELTA_TIME
     if keys[pygame.K_s] or keys[pygame.K_DOWN]:
-        player_pos.y += PLAYER_MOVEMENT_SPEED * dt
+        PLAYER_POSITION.y += PLAYER_MOVEMENT_SPEED * DELTA_TIME
     if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-        player_pos.x -= PLAYER_MOVEMENT_SPEED * dt
+        PLAYER_POSITION.x -= PLAYER_MOVEMENT_SPEED * DELTA_TIME
     if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-        player_pos.x += PLAYER_MOVEMENT_SPEED * dt
+        PLAYER_POSITION.x += PLAYER_MOVEMENT_SPEED * DELTA_TIME
 
-    # flip() the display to put your work on screen
+    # flip() the display to put your work on SCREEN
     pygame.display.flip()
 
     # limits FPS to 60
-    # dt is delta time in seconds since last frame, used for framerate-
+    # DELTA_TIME is delta time in seconds since last frame, used for framerate-
     # independent physics.
-    dt = clock.tick(60) / 1000
+    DELTA_TIME = CLOCK.tick(60) / 1000
 
 pygame.quit()
