@@ -1,5 +1,5 @@
 # Example file showing a basic pygame "game loop"
-import pygame
+import pygame, file_manager
 
 # pygame setup
 pygame.init()
