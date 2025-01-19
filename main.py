@@ -1,11 +1,18 @@
 # Example file showing a basic pygame "game loop"
 import pygame, file_manager
+import pygame.draw_py
 
 # pygame setup
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
+dt = 0
+
+player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
+gameDisplay = pygame.display.set_mode((1280,720))
+
+playerImg = pygame.image.load(file_manager.playerAsset('idle'), "player-idle")
 
 while running:
     # poll for events
@@ -17,11 +24,24 @@ while running:
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("black")
 
-    # RENDER YOUR GAME HERE
+    gameDisplay.blit(playerImg, player_pos)
+
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_w]:
+        player_pos.y -= 300 * dt
+    if keys[pygame.K_s]:
+        player_pos.y += 300 * dt
+    if keys[pygame.K_a]:
+        player_pos.x -= 300 * dt
+    if keys[pygame.K_d]:
+        player_pos.x += 300 * dt
 
     # flip() the display to put your work on screen
     pygame.display.flip()
 
-    clock.tick(60)  # limits FPS to 60
+    # limits FPS to 60
+    # dt is delta time in seconds since last frame, used for framerate-
+    # independent physics.
+    dt = clock.tick(60) / 1000
 
 pygame.quit()
